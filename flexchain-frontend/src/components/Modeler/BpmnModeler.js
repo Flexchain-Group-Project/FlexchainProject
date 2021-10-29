@@ -1,19 +1,17 @@
-import React from "react";
-import './ModelerStyles.css'
-import ReactBpmn from './ModelerFunctions'
-import model from '../../diagrams/pizzaDelivery.bpmn'
+import BpmnJS from "bpmn-js/lib/Modeler";
+
+import "bpmn-js/dist/assets/diagram-js.css";
+
+import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
+
+
+import diagram from "../../diagrams/diagram.bpmn";
 import Container from "react-bootstrap/Container";
 
-
-const BpmnModeler = ()=>{
-
-    return(
-      <div className='canvas'>
+export default function BpmnModeler() {
+  return(
       <Container className='mt-5'>
-          <ReactBpmn url={model}/>
+      <p>You are in the modeler</p>
       </Container>
-      </div>
-    );
-};
-
-export default BpmnModeler;
+  );
+}

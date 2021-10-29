@@ -11,6 +11,8 @@
     "chor-js": "^0.7.1",
     "history": "^5.0.1",
     "inherits": "^2.0.4",
+    "list-files": "^1.1.4",
+    "list-react-files": "^0.2.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0",
     "react-bpmn": "^0.2.0",

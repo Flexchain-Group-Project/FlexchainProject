@@ -12,7 +12,7 @@ const NavigationBar = ()=>{
             <Nav className="me-auto">
                 <Nav.Link href="/modeler">Choreography Modeler</Nav.Link>
                 <Nav.Link href="/deploy">Deploy Contract</Nav.Link>
-                <Nav.Link href="#pricing">Pricing</Nav.Link>
+                <Nav.Link href="/contracts">Contracts</Nav.Link>
             </Nav>
         </Container>
     </Navbar>

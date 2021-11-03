@@ -4,6 +4,8 @@ import {BrowserRouter as Router,Routes, Route} from "react-router-dom";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import BpmnModeler from "./components/Modeler/BpmnModeler";
 import Deployer from "./components/Deployer/Deployer";
+import Contratti from "./components/Contratti";
+import {DeployedContracts} from "./contracts/DeployedContracts";
 
 const App = ()=>(
     <Router>
@@ -11,6 +13,7 @@ const App = ()=>(
       <Routes>
         <Route path='/modeler' element={<BpmnModeler/>}/>
           <Route path='/deploy' element={<Deployer/>}/>
+          <Route path='/contracts' element={<Contratti/>}/>
       </Routes>
     </Router>
 );

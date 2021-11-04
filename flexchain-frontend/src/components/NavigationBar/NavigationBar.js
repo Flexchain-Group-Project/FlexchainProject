@@ -8,7 +8,7 @@ const NavigationBar = ()=>{
    return(
     <Navbar bg="primary" variant="dark">
         <Container>
-            <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+            <Navbar.Brand href="#home">Flexchain</Navbar.Brand>
             <Nav className="me-auto">
                 <Nav.Link href="/modeler">Choreography Modeler</Nav.Link>
                 <Nav.Link href="/deploy">Deploy Contract</Nav.Link>

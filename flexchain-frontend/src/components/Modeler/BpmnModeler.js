@@ -1,14 +1,14 @@
 
 
-
+import raw from 'raw.macro';
 
 import "bpmn-js/dist/assets/diagram-js.css";
 
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 import Canvas from "./Canvas";
 
-import diagram from "../../diagrams/diagram.bpmn";
-import pizza from "./pizzaDelivery.bpmn"
+import diagram from "../../assets/diagram.bpmn.jsx";
+import pizza from "../../assets/pizzaDelivery.bpmn"
 import Container from "react-bootstrap/Container";
 
 import ChorJS from 'chor-js/lib/Modeler';
@@ -42,7 +42,8 @@ async function loadBpmn(){
             bindTo: document
         }
     });
-   await modeler.importXML(pizza,'PizzaDelivery');
+  const d = raw("../../assets/pizzaDelivery.bpmn");
+   await modeler.importXML(d);
 
 
     console.log("here")

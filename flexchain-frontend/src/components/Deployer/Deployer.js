@@ -60,7 +60,7 @@ const Deployer = () => {
                                 handleSelect(e)
                             }}>{contract}</Dropdown.Item>
                         ))}
-                        {/*<Dropdown.Item href="../../diagrams/diagram.bpmn">Action</Dropdown.Item>
+                        {/*<Dropdown.Item href="../../diagrams/diagram.bpmn.jsx">Action</Dropdown.Item>
                         <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                         <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>*/}
                     </Dropdown.Menu>

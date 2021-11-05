@@ -12,7 +12,7 @@ import Form from "react-bootstrap/Form";
 import React, {useState, useEffect} from "react";
 import {RiFileAddLine as IconNew} from 'react-icons/ri'
 import {RiDownloadCloudFill as IconDownload} from 'react-icons/ri'
-
+import {RiUploadCloudFill as IconUpload} from 'react-icons/ri'
 
 
 
@@ -45,15 +45,14 @@ export default function BpmnModeler() {
                 <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
 
 
-               <Button title="Download BPMN XML file"  onClick={()=>{clicked(document.getElementById('download'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
+               <Button title="Download BPMN XML file"  onClick={()=>{DownloadBtnClicked(document.getElementById('download'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
                <a  id='download' style={{display: "none"}}  onClick={(e)=>{downloadFile(e.target,modeler)}} ></a>
 
-                <Form.Group controlId="formFile" className="mb-3"  style={{display:'inline-block',marginLeft: '30px'}}>
-                    <Form.Label>Upload BPMN file</Form.Label>
-                    <Form.Control type="file" accept=".bpmn, .xml" onChange={(event) => {
-                        loadDiagram(event.target.files[0],modeler)
-                    }}/>
-                </Form.Group>
+               <Button title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconUpload size='40'/></Button>
+
+               <Form.Control id='upload' type="file" accept=".bpmn, .xml" onChange={(event) => {
+                   loadDiagram(event.target.files[0],modeler)
+               }} style={{display:'none'}}/>
 
            </div>
         </Container>
@@ -63,10 +62,19 @@ export default function BpmnModeler() {
 
 }
 //<div className='mb-2' style={{width: '30%'}}>
-function clicked(download){
+/*<Form.Group controlId="formFile" className="mb-3"  style={{display:'inline-block',marginLeft: '30px'}}>
+    <Form.Label>Upload BPMN file</Form.Label>
+    <Form.Control type="file" accept=".bpmn, .xml" onChange={(event) => {
+        loadDiagram(event.target.files[0],modeler)
+    }}/>
+</Form.Group>*/
+
+function DownloadBtnClicked(download){
  download.click();
 }
-
+function UploadBtnClicked(upload){
+    upload.click();
+}
 
 async function createNewDiagram(modeler) {
        const diagram = raw("../../diagrams/emptyDiagram.bpmn");

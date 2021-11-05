@@ -6,6 +6,8 @@ import emptyDiagram from "../../diagrams/emptyDiagram.bpmn"
 import Container from "react-bootstrap/Container";
 import ChorJS from 'chor-js/lib/Modeler';
 import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col"
+import Row from "react-bootstrap/Row"
 import Form from "react-bootstrap/Form";
 import React, {useState, useEffect} from "react";
 import {RiFileAddLine as IconNew} from 'react-icons/ri'
@@ -39,24 +41,31 @@ export default function BpmnModeler() {
             }).catch(e => {
                 console.log(e);
             })}>Load bpmn</Button>*/}
-            <div className='mb-2' style={{width: '30%'}}>
-                <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew/></Button>
-                <Form.Group controlId="formFile" className="mb-3">
+           <div style={{textAlign:"left"}}>
+                <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
+
+
+               <Button title="Download BPMN XML file"  onClick={()=>{clicked(document.getElementById('download'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
+               <a  id='download' style={{display: "none"}}  onClick={(e)=>{downloadFile(e.target,modeler)}} ></a>
+
+                <Form.Group controlId="formFile" className="mb-3"  style={{display:'inline-block',marginLeft: '30px'}}>
                     <Form.Label>Upload BPMN file</Form.Label>
                     <Form.Control type="file" accept=".bpmn, .xml" onChange={(event) => {
                         loadDiagram(event.target.files[0],modeler)
                     }}/>
                 </Form.Group>
-                <a title="Download BPMN XML file" onClick={(e)=>{downloadFile(modeler)}}><IconDownload/></a>
-            </div>
+
+           </div>
         </Container>
 
 
     );
 
 }
-
-
+//<div className='mb-2' style={{width: '30%'}}>
+function clicked(download){
+ download.click();
+}
 
 
 async function createNewDiagram(modeler) {
@@ -64,12 +73,14 @@ async function createNewDiagram(modeler) {
        await modeler.importXML(diagram);
 }
 
-async function downloadFile(modeler){
-   // console.log(downloadLink);
+async function downloadFile(event,modeler){
+    const downloadLink = document.getElementById('download');
+    console.log(event);
     const result = await modeler.saveXML({ format: true });
-   // downloadLink['href'] = 'data:application/bpmn20-xml;charset=UTF-8,' + encodeURIComponent(result.xml);
-   // downloadLink['download'] = "diagram.bpmn";
+    event['href'] = 'data:application/bpmn20-xml;charset=UTF-8,' + encodeURIComponent(result.xml);
+    event['download'] = "diagram.bpmn";
 }
+
 
 function loadDiagram(file,modeler) {
 

@@ -45,7 +45,7 @@ export default function BpmnModeler() {
                 <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
 
 
-               <Button title="Download BPMN XML file"  onClick={()=>{DownloadBtnClicked(document.getElementById('download'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
+               <Button title="Download BPMN XML file"  onClick={()=>downloadFile(modeler)} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
                <a  id='download' style={{display: "none"}}  onClick={(e)=>{downloadFile(e.target,modeler)}} ></a>
 
                <Button title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconUpload size='40'/></Button>
@@ -81,12 +81,13 @@ async function createNewDiagram(modeler) {
        await modeler.importXML(diagram);
 }
 
-async function downloadFile(event,modeler){
-    const downloadLink = document.getElementById('download');
-    console.log(event);
+async function downloadFile(modeler){
     const result = await modeler.saveXML({ format: true });
-    event['href'] = 'data:application/bpmn20-xml;charset=UTF-8,' + encodeURIComponent(result.xml);
-    event['download'] = "diagram.bpmn";
+    const url = 'data:application/bpmn20-xml;charset=UTF-8,' + encodeURIComponent(result.xml);
+    const link = document.createElement('a');
+    link.download = 'diagram.bpmn';
+    link.href = url;
+    link.click();
 }
 
 

@@ -1,40 +1,30 @@
 import Web3 from 'web3'
 import Container from "react-bootstrap/Container";
 import './Deployer.styles.css'
-import Dropdown from 'react-bootstrap/Dropdown'
 import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import {Counter, ABI, BYTECODE} from "../../contracts/Counter";
+import Form from "react-bootstrap/Form"
 import React, {useEffect, useState} from "react";
-import {useStore,useSelector, useDispatch} from 'react-redux'
-import {decrement, increment} from '../counterSlice'
 
-//let loaded=false;
+
+
+
 
 const Deployer = () => {
     const [contractName, setContractName] = useState('');
     const [address, setAddress] = useState('');
-    const c = ['counter.sol', 'example.sol'];
-    const store=useStore();
-    const count = useSelector((state) => state.counter.value);
-    const dispatch = useDispatch();
+    const [abi,setAbi]=useState();
+    const [bytecode,setBytecode]=useState();
 
-    // if(loaded===false){DeployedContracts(); loaded=true;}
-
-    // const [count, setCount]=useGlobalState("count");
-
-    const clicked = (e) => {
-        dispatch(increment());
-        console.log('count:', count);
-
+    async function contractUpload(file){
+        await import('../../contracts/' + file.name).then((res)=>{
+            setContractName(res.contractName);
+            setAbi(res.abi);
+            setBytecode(res.bytecode);
+        });
     }
 
 
-    const handleSelect = (e) => {
-        e.preventDefault();
-        // console.log(e.target.text);
-        setContractName(e.target.text);
-    }
+
 
     const saveContract = async () => {
         setAddress(await deploy());
@@ -48,31 +38,21 @@ const Deployer = () => {
     return (
         <div className='Center'>
             <Container className='mt-5'>
-                <h1>You are in the deployer</h1>
-                <Dropdown as={ButtonGroup}>
-                    <Button variant="success" onClick={() => saveContract()}>Deploy</Button>
-
-                    <Dropdown.Toggle split variant="success" id="dropdown-split-basic"/>
-
-                    <Dropdown.Menu>
-                        {c.map(contract => (
-                            <Dropdown.Item key={contract.toString()} onClick={(e) => {
-                                handleSelect(e)
-                            }}>{contract}</Dropdown.Item>
-                        ))}
-                        {/*<Dropdown.Item href="../../diagrams/diagram.bpmn.jsx">Action</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>*/}
-                    </Dropdown.Menu>
-                </Dropdown>
-                <h3 className='mt-3'>{contractName}</h3>
+                <h1>Contract Deployer</h1>
+                <Form.Group controlId="formFile" className="mb-3"  style={{display:'inline-block',marginLeft: '30px'}}>
+                <Form.Label>Upload contract to deploy</Form.Label>
+                <Form.Control type="file" accept=".json" onChange={(e)=>contractUpload(e.target.files[0])} />
+            </Form.Group>
             </Container>
+            <Button variant="success" onClick={()=>deploy(contractName,abi,bytecode)}>Deploy</Button>
         </div>
 
     );
 
 }
 export default Deployer;
+
+
 
 
 function getWeb3() {
@@ -86,19 +66,29 @@ async function getSender(web3) {
     return accounts[0];
 }
 
-function getContract(web3) {
+function getContract(web3,abi) {
 
-    return new web3.eth.Contract(ABI);
+    return new web3.eth.Contract(abi);
 
 }
 
-async function deploy() {
+async function deploy(name,abi,bytecode) {
 
     const web3 = getWeb3();
     const account = await getSender(web3);
-    const contract = getContract(web3);
-    const cont = await contract.deploy({data: BYTECODE}).send({gas: 1000000, from: account});
+    const contract = getContract(web3,abi);
+    const cont = await contract.deploy({data:bytecode}).send({gas: 1000000, from: account});
     const address = cont.options.address;
-    return address;
+    handleSaveToPC(address);
 
+}
+
+const handleSaveToPC = (jsonData) => {
+    const fileData = JSON.stringify(jsonData);
+    const blob = new Blob([fileData], {type: "text/plain"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'filename.json';
+    link.href = url;
+    link.click();
 }

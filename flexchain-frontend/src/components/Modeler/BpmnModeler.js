@@ -36,17 +36,10 @@ export default function BpmnModeler() {
     return (
         <Container className='mt-5'>
             <div className='mb-3' id="canvas" style={{height: 500, width: '90%', border: '1px solid grey'}}/>
-            {/* <Button onClick={()=>loadBpmn().then(response => {
-                console.log(response);
-            }).catch(e => {
-                console.log(e);
-            })}>Load bpmn</Button>*/}
            <div style={{textAlign:"left"}}>
                 <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
 
-
                <Button title="Download BPMN XML file"  onClick={()=>downloadFile(modeler)} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
-               <a  id='download' style={{display: "none"}}  onClick={(e)=>{downloadFile(e.target,modeler)}} ></a>
 
                <Button title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconUpload size='40'/></Button>
 
@@ -61,17 +54,9 @@ export default function BpmnModeler() {
     );
 
 }
-//<div className='mb-2' style={{width: '30%'}}>
-/*<Form.Group controlId="formFile" className="mb-3"  style={{display:'inline-block',marginLeft: '30px'}}>
-    <Form.Label>Upload BPMN file</Form.Label>
-    <Form.Control type="file" accept=".bpmn, .xml" onChange={(event) => {
-        loadDiagram(event.target.files[0],modeler)
-    }}/>
-</Form.Group>*/
 
-function DownloadBtnClicked(download){
- download.click();
-}
+
+
 function UploadBtnClicked(upload){
     upload.click();
 }

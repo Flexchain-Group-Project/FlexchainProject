@@ -26,14 +26,7 @@ const Deployer = () => {
 
 
 
-    const saveContract = async () => {
-        setAddress(await deploy());
-        const element = {
-            name: contractName,
-            address: address
-        }
 
-    }
 
     return (
         <div className='Center'>
@@ -79,16 +72,17 @@ async function deploy(name,abi,bytecode) {
     const contract = getContract(web3,abi);
     const cont = await contract.deploy({data:bytecode}).send({gas: 1000000, from: account});
     const address = cont.options.address;
-    handleSaveToPC(address);
+    const jsonData = {"address":address,"abi":abi};
+    saveDeployedContracts(name,jsonData);
 
 }
 
-const handleSaveToPC = (jsonData) => {
+const saveDeployedContracts = (name,jsonData) => {
     const fileData = JSON.stringify(jsonData);
     const blob = new Blob([fileData], {type: "text/plain"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.download = 'filename.json';
+    link.download = name+'.json';
     link.href = url;
     link.click();
 }

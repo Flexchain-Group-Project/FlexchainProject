@@ -2,7 +2,7 @@ import {useGlobalState} from "state-pool";
 import React, {useState, useEffect} from "react";
 import Web3 from 'web3'
 import {ABI} from "../contracts/Counter";
-
+import c from "../deployedContracts/Counter.json"
 
 
 
@@ -12,7 +12,7 @@ const Contratti = () => {
     const address = '0x2d92Af846551D468698fBD715C4336349adD23dc';
     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
     const counter = new web3.eth.Contract(ABI, address);
-
+  console.log( c.address);
     async function result(){
         const result = await  counter.getPastEvents('Increased',{});
         return result;

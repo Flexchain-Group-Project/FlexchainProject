@@ -1,4 +1,4 @@
-import {useGlobalState} from "state-pool";
+
 import React, {useState, useEffect} from "react";
 import Web3 from 'web3'
 import {ABI} from "../contracts/Counter";

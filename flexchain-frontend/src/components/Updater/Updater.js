@@ -14,6 +14,7 @@ export default function Updater(){
 
     const [modeler,setModeler]=useState();
     const [viewer,setViewer]=useState();
+    const [elementsCount,setElementsCount]=useState();
 
     useEffect(()=>{
         const modeler = new Modeler({
@@ -26,12 +27,6 @@ export default function Updater(){
               //  defaultStrokeColor: 'lime'
             }
         });
-
-     console.log(modeler.get('bpmnRenderer'));
-     let rend =modeler.get('bpmnRenderer');
-     rend = { defaultStrokeColor: 'lime'};
-     const canvas = modeler.get('canvas');
-
         setModeler(modeler);
 
         const viewer = new Viewer({
@@ -44,14 +39,28 @@ export default function Updater(){
     },[])
 
 
+
+    function loadDiagram(file,modeler,viewer) {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = async () => {
+                await modeler.importXML(reader.result).then(()=>{setElementsCount(getElementRegistry(modeler))});
+                await viewer.importXML(reader.result);
+            }
+            reader.readAsText(file);
+        }
+
+    }
+
     return (
         <Container className='mt-5'>
             <div className='mb-3' id="canvas-viewer" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
             <div className='mb-3' id="canvas-modeler" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
-            <Button title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconUpload size='40'/></Button>
-
+            <Button  title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px',marginBottom:'20px'}}><IconUpload size='40'/></Button>
+            <Button style={{display:'inline-block',marginLeft: '30px',marginBottom:'20px'}} onClick={()=>{showChanges(modeler,elementsCount)}}>Show Changes</Button>
             <Form.Control id='upload' type="file" accept=".bpmn, .xml" onChange={(event) => {
-                loadDiagram(event.target.files[0],modeler,viewer)
+              loadDiagram(event.target.files[0], modeler, viewer);
+               console.log(elementsCount);
             }} style={{display:'none'}}/>
         </Container>
 
@@ -62,15 +71,44 @@ function UploadBtnClicked(upload){
     upload.click();
 }
 
-function loadDiagram(file,modeler,viewer) {
 
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = async () => {
-            await modeler.importXML(reader.result);
-            await viewer.importXML(reader.result);
-        }
-        reader.readAsText(file);
 
-    }
+function getElementRegistry(modeler){
+    const elementRegistry = modeler.get('elementRegistry');
+    console.log(elementRegistry.getAll());
+    const elementList = elementRegistry.getAll();
+    const len = elementList.length;
+
+    let items = [];
+
+    elementRegistry.forEach(function (regItem, gfx) {
+        items.push(regItem);
+    });
+
+    console.log(items);
+    return items.length;
+}
+
+function showChanges(modeler,elementsCount){
+    console.log(elementsCount);
+    const modeling = modeler.get('modeling');
+    const elementRegistry = modeler.get('elementRegistry');
+    console.log(elementRegistry.getAll());
+    const elementList = elementRegistry.getAll();
+    const len = elementList.length;
+
+    let items = [];
+
+    elementRegistry.forEach(function (regItem, gfx) {
+        items.push(regItem);
+    });
+
+
+    const elementsToColor= items.slice(elementsCount);
+
+    console.log(elementsToColor.length);
+    modeling.setColor(elementsToColor, {
+        stroke: 'lime',
+        fill: 'lime'
+    });
 }

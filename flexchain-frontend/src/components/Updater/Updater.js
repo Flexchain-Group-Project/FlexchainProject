@@ -46,8 +46,8 @@ export default function Updater(){
 
     return (
         <Container className='mt-5'>
-            <div className='mb-3' id="canvas-modeler" style={{height: 600, width: '50%', border: '1px solid grey',display:'inline-block'}}/>
-            <div className='mb-3' id="canvas-viewer" style={{height: 600, width: '50%', border: '1px solid grey',display:'inline-block'}}/>
+            <div className='mb-3' id="canvas-viewer" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
+            <div className='mb-3' id="canvas-modeler" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
             <Button title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconUpload size='40'/></Button>
 
             <Form.Control id='upload' type="file" accept=".bpmn, .xml" onChange={(event) => {

@@ -13,6 +13,7 @@ import {TiTick as TickIcon} from 'react-icons/ti'
 import Web3 from "web3";
 import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
+import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import "./ModelerStyles.less"
 import Offcanvas from 'react-bootstrap/Offcanvas'
 
@@ -57,7 +58,7 @@ export default function BpmnModeler() {
 
             <Offcanvas show={show} onHide={handleClose} onShow={()=>p()}>
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+                    <Offcanvas.Title>Properties Panel</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <div id="panel"></div>

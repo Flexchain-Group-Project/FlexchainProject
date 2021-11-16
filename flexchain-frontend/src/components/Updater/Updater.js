@@ -103,12 +103,13 @@ function showChanges(modeler,elementsCount){
         items.push(regItem);
     });
 
+    if(items.length>elementsCount) {
+        const elementsToColor = items.slice(elementsCount);
 
-    const elementsToColor= items.slice(elementsCount);
-
-    console.log(elementsToColor.length);
-    modeling.setColor(elementsToColor, {
-        stroke: 'lime',
-        fill: 'lime'
-    });
+        console.log(elementsToColor.length);
+        modeling.setColor(elementsToColor, {
+            stroke: 'lime',
+            fill: 'lime'
+        });
+    }
 }

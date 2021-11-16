@@ -13,6 +13,7 @@ import {TiTick as TickIcon} from 'react-icons/ti'
 import Web3 from "web3";
 import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
+import "./ModelerStyles.less"
 
 export default function BpmnModeler() {
 
@@ -38,7 +39,7 @@ export default function BpmnModeler() {
     return (
         <Container className='mt-5'>
             <div className='mb-3' id="canvas" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
-            <div id="properties-panel" style={{display:'none'}}></div>
+            <div id="properties-panel"></div>
            <div style={{textAlign:"left"}}>
                 <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
 
@@ -50,7 +51,7 @@ export default function BpmnModeler() {
                    loadDiagram(event.target.files[0],modeler)
                }} style={{display:'none'}}/>
 
-               <Button style={{display:'inline-block',marginLeft: '30px'}} onClick={()=>mockAPI()}>Deploy<TickIcon/></Button>
+               <Button style={{display:'inline-block',marginLeft: '30px',height:'54px'}} onClick={()=>mockAPI()}>Deploy<TickIcon/></Button>
            </div>
         </Container>
 

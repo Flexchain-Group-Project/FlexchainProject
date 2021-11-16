@@ -14,10 +14,17 @@ import Web3 from "web3";
 import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import "./ModelerStyles.less"
+import Offcanvas from 'react-bootstrap/Offcanvas'
 
 export default function BpmnModeler() {
 
     const [modeler,setModeler]=useState();
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () =>{ setShow(true);}
+
 
     useEffect(()=>{
         const model = new ChorJS({
@@ -36,10 +43,31 @@ export default function BpmnModeler() {
         setModeler(model);
     },[])
 
+    function p(){
+        const properties = modeler.get('propertiesPanel');
+        properties.detach();
+        properties.attachTo('#panel');
+    }
+
+
     return (
         <Container className='mt-5'>
             <div className='mb-3' id="canvas" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
-            <div id="properties-panel"></div>
+            <div id="properties-panel" style={{display:'none'}}></div>
+
+            <Offcanvas show={show} onHide={handleClose} onShow={()=>p()}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <div id="panel"></div>
+                </Offcanvas.Body>
+            </Offcanvas>
+
+            <Button variant="primary" onClick={handleShow}>
+                Launch
+            </Button>
+
            <div style={{textAlign:"left"}}>
                 <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
 

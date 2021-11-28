@@ -10,24 +10,33 @@ import {RiFileAddLine as IconNew} from 'react-icons/ri'
 import {RiDownloadCloudFill as IconDownload} from 'react-icons/ri'
 import {RiUploadCloudFill as IconUpload} from 'react-icons/ri'
 import {TiTick as TickIcon} from 'react-icons/ti'
+import {GoChevronRight as RightIcon} from 'react-icons/go'
 import Web3 from "web3";
 import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
-import "./ModelerStyles.less"
 import Offcanvas from 'react-bootstrap/Offcanvas'
+import {mockAPI,deployMonitor} from "../Deployer/DeploymentFunctions";
+import Alert from '@mui/material/Alert';
+
+
+
+
 
 export default function BpmnModeler() {
 
-    const [modeler,setModeler]=useState();
+    const [modeler, setModeler] = useState();
+    const[diagramName,setDiagramName]=useState();
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () =>{ setShow(true);}
+    const handleShow = () => {
+        setShow(true);
+    }
 
 
-    useEffect(()=>{
+    useEffect(() => {
         const model = new ChorJS({
             container: '#canvas',
             propertiesPanel: {
@@ -42,9 +51,10 @@ export default function BpmnModeler() {
             }
         });
         setModeler(model);
-    },[])
+        //deployMonitor();
+    }, [])
 
-    function p(){
+    function attachPanel() {
         const properties = modeler.get('propertiesPanel');
         properties.detach();
         properties.attachTo('#panel');
@@ -52,11 +62,12 @@ export default function BpmnModeler() {
 
 
     return (
-        <Container className='mt-5'>
+        <Container fluid>
+            <h5 title='Show properties panel' style={{fontFamily:'Arial', width:'130px'}} className='mt-4' onClick={handleShow} onMouseLeave={(e)=>e.target.style.color='black'} onMouseOver={(e)=>e.target.style.color='grey'}><RightIcon/>Properties</h5>
             <div className='mb-3' id="canvas" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
-            <div id="properties-panel" style={{display:'none'}}></div>
+            <div id="properties-panel" style={{display: 'none'}}></div>
 
-            <Offcanvas show={show} onHide={handleClose} onShow={()=>p()}>
+            <Offcanvas show={show} onHide={handleClose} onShow={() => attachPanel()}>
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Properties Panel</Offcanvas.Title>
                 </Offcanvas.Header>
@@ -65,53 +76,58 @@ export default function BpmnModeler() {
                 </Offcanvas.Body>
             </Offcanvas>
 
-            <Button variant="primary" onClick={handleShow}>
-                Launch
-            </Button>
 
-           <div style={{textAlign:"left"}}>
-                <Button title='Create new diagram' onClick={()=>{createNewDiagram(modeler)}}><IconNew size='40' style={{display:'inline-block'}}/></Button>
+            <div style={{textAlign: "left"}}>
+                <Button title='Create new diagram' onClick={() => {
+                    createNewDiagram(modeler)
+                }} style={{}}><IconNew size='40' style={{display: 'inline-block'}}/></Button>
 
-               <Button title="Download BPMN XML file"  onClick={()=>downloadFile(modeler)} style={{display:'inline-block',marginLeft: '30px'}}><IconDownload size='40'/></Button>
+                <Button title="Download BPMN XML file" onClick={() =>downloadFile(modeler)}
+                        style={{display: 'inline-block', marginLeft: '30px'}}><IconDownload size='40'/></Button>
 
-               <Button title="Upload BPMN XML file" onClick={()=>{UploadBtnClicked(document.getElementById('upload'))}} style={{display:'inline-block',marginLeft: '30px'}}><IconUpload size='40'/></Button>
+                <Button title="Upload BPMN XML file" onClick={() => {
+                    UploadBtnClicked(document.getElementById('upload'))
+                }} style={{display: 'inline-block', marginLeft: '30px'}}><IconUpload size='40'/></Button>
 
-               <Form.Control id='upload' type="file" accept=".bpmn, .xml" onChange={(event) => {
-                   loadDiagram(event.target.files[0],modeler)
-               }} style={{display:'none'}}/>
+                <Form.Control id='upload' type="file" accept=".bpmn, .xml" onChange={(event) => {
+                    loadDiagram(event.target.files[0], modeler);
+                    setDiagramName(event.target.files[0].name);
+                    console.log(diagramName);
+                }} style={{display: 'none'}}/>
 
-               <Button style={{display:'inline-block',marginLeft: '30px',height:'54px'}} onClick={()=>mockAPI()}>Deploy<TickIcon/></Button>
-           </div>
+                <Button style={{display: 'inline-block', marginLeft: '30px', height: '54px'}} onClick={() => mockAPI(diagramName)}>Deploy<TickIcon/></Button>
+            </div>
+
         </Container>
-
 
     );
 
 }
 
 
-
-function UploadBtnClicked(upload){
+function UploadBtnClicked(upload) {
     upload.click();
 }
 
 async function createNewDiagram(modeler) {
-       const diagram = raw("../../diagrams/emptyDiagram.bpmn");
-       await modeler.importXML(diagram);
+    const diagram = raw("../../diagrams/emptyDiagram.bpmn");
+    await modeler.importXML(diagram);
 }
 
-async function downloadFile(modeler){
-    const result = await modeler.saveXML({ format: true });
-    const url = 'data:application/bpmn20-xml;charset=UTF-8,' + encodeURIComponent(result.xml);
-    const link = document.createElement('a');
-    link.download = 'diagram.bpmn';
-    link.href = url;
-    link.click();
+async function downloadFile(modeler) {
+   try {
+       const result = await modeler.saveXML({format: true});
+       const url = 'data:application/bpmn20-xml;charset=UTF-8,' + encodeURIComponent(result.xml);
+       const link = document.createElement('a');
+       link.download = 'diagram.bpmn';
+       link.href = url;
+       link.click();
+   }catch (e){alert("Caricare un diagramma prima del download")}
 }
 
 
-function loadDiagram(file,modeler) {
-
+function loadDiagram(file, modeler) {
+    console.log(file.name)
     if (file) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -122,14 +138,19 @@ function loadDiagram(file,modeler) {
     }
 }
 
-async function mockAPI(){
-    let contract
-    const response = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/hello');
-   response.json().then(res=>{console.log(res); deploy2(res)});
+/*async function mockAPI() {
+    const response = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/process' +
+        '');
+    response.json().then(res => {
+        console.log(res);
+       // deploy2(res)
+        deploy(res.contractName,res.abi,res.bytecode);
+    });
 
 }
-async function deploy2(contract){
-    await deploy(contract.contractName,contract.abi,contract.bytecode);
+
+async function deploy2(contract) {
+    await deploy(contract.contractName, contract.abi, contract.bytecode);
 }
 
 function getWeb3() {
@@ -143,18 +164,18 @@ async function getSender(web3) {
     return accounts[0];
 }
 
-function getContract(web3,abi) {
+function getContract(web3, abi) {
 
     return new web3.eth.Contract(abi);
 
 }
 
-async function deploy(name,abi,bytecode) {
+async function deploy(name, abi, bytecode) {
     const web3 = getWeb3();
     const account = await getSender(web3);
-    const contract = getContract(web3,abi);
-    const cont = await contract.deploy({data:bytecode}).send({gas: 1000000, from: account});
+    const contract = getContract(web3, abi);
+    const cont = await contract.deploy({data: bytecode}).send({gas: 1000000, from: account});
     const address = cont.options.address;
-    const jsonData = {"address":address,"abi":abi};
+    const jsonData = {"address": address, "abi": abi};
 
-}
+}*/

@@ -1,0 +1,17 @@
+.highlight_red:not(.djs-connection) .djs-visual > :nth-child(1) {
+    fill: red !important; /* color elements as red */
+    stroke: red;
+    opacity: 0.4;
+}
+
+.highlight_green:not(.djs-connection) .djs-visual > :nth-child(1) {
+    fill: limegreen !important; /* color elements as green */
+    stroke: limegreen;
+    opacity: 0.4;
+}
+
+.highlight_yellow:not(.djs-connection) .djs-visual > :nth-child(1) {
+    fill: yellow !important; /* color elements as green */
+    stroke: yellow;
+    opacity: 0.4;
+}

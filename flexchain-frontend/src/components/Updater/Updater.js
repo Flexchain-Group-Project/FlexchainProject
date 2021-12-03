@@ -20,7 +20,8 @@ import hash from 'hash-it';
 
 export default function Updater() {
 
-    const[list , setList]=useState([]);
+    const[addressList , setAddressList]=useState([]);
+    const[diagramsList , setDiagramsList]=useState([]);
     const [modeler, setModeler] = useState();
     const [viewer, setViewer] = useState();
     const [elementsCount, setElementsCount] = useState();
@@ -31,6 +32,20 @@ export default function Updater() {
     const handleClose = () => setShow(false);
     const handleShow = () => {
         setShow(true);
+    }
+
+    async function getMonitorPastEvents(){
+        const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+        const contract = new web3.eth.Contract(abi,'0xdCE3eD3ACf2d285338d38B215E0931831840287d');
+        const address= await getSender(web3);
+        await contract.getPastEvents("newContract",{
+            filter:{sender:address},
+            fromBlock:0
+        }).then(r=>setAddressList(r));
+       const diagramsList = await contract.methods.getDiagrams().call();
+       setDiagramsList(diagramsList);
+       console.log(diagramsList);
+
     }
 
     function attachPanel() {
@@ -66,8 +81,8 @@ export default function Updater() {
             }
         });
         setViewer(viewer);
-    setList(await getMonitorPastEvents());
 
+      await  getMonitorPastEvents()
     }, [])
 
 
@@ -86,9 +101,14 @@ export default function Updater() {
 
     }
 
+    const props={
+        addresses:addressList,
+        diagrams:diagramsList
+    }
+
     return (
         <Container fluid className='mt-5'>
-            <SelectAddress addressList={list}/>
+            <SelectAddress addressList={addressList} diagramsList={diagramsList}/>
             <div className='mb-3' id="canvas-viewer" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
             <h5 title='Show properties panel' style={{fontFamily:'Arial',width:'auto'}} className='mt-4' onClick={handleShow} onMouseLeave={(e)=>e.target.style.color='black'} onMouseOver={(e)=>e.target.style.color='grey'}><RightIcon/>Properties</h5>
             <div id="properties-panel" style={{display: 'none'}}></div>
@@ -187,15 +207,5 @@ function showChanges(modeler, elementsCount, viewer, registry) {
     }
 }
 
- async function getMonitorPastEvents(){
-    const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-    const contract = new web3.eth.Contract(abi,'0x2BB5F2Bf44C28c34811D3d75E65Cd6caA61B1312');
-    const address= await getSender(web3);
-    return  await contract.getPastEvents("newContract",{
-        filter:{sender:address},
-        fromBlock:0
-    });
 
-
-}
 

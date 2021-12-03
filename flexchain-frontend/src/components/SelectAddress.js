@@ -1,18 +1,18 @@
+import Web3 from "web3";
 import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function SelectAddress(addressList) {
+export default function SelectAddress(props) {
     const [address, setAddress] = React.useState([]);
-    let x = 1;
     const handleChange = (event) => {
         setAddress(event.target.value);
     };
 
-    console.log(addressList)
-
+    // console.log(props.address)
+     console.log(props.diagramsList)
 
     return (
         <div>
@@ -26,18 +26,22 @@ export default function SelectAddress(addressList) {
                     autoWidth
                     label="Contract Address"
                 >
+                       {props.addressList.map(
 
-                       {addressList.addressList.map(
-                            address=>(
+                           (address,index)=>(
                                 <MenuItem value={address.returnValues.newContract}>
-                                <em key={address.returnValues.newContract}>{address.returnValues.newContract}</em>
+                                {/*<em key={address.returnValues.newContract}>{address.returnValues.newContract}</em>*/}
+                                 <em title={address.returnValues.newContract}>{props.diagramsList[index]}</em>
                                 </MenuItem>
+
                             )
                         )}
-
-
                 </Select>
             </FormControl>
         </div>
     );
+}
+
+function getWeb3() {
+    return new Web3(Web3.givenProvider || "ws://localhost:8545");
 }

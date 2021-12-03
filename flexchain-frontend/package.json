@@ -61,6 +61,7 @@
   "devDependencies": {
     "@reduxjs/toolkit": "^1.6.2",
     "bpmn-js": "^8.8.2",
-    "raw-loader": "^4.0.2"
+    "raw-loader": "^4.0.2",
+    "web3-eth": "^1.6.1"
   }
 }

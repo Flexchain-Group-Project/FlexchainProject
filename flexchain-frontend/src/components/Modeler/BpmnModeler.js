@@ -26,7 +26,7 @@ import Alert from '@mui/material/Alert';
 export default function BpmnModeler() {
 
     const [modeler, setModeler] = useState();
-    const[diagramName,setDiagramName]=useState();
+    const[diagramName,setDiagramName]=useState('diagram.bpmn');
 
     const [show, setShow] = useState(false);
 
@@ -92,7 +92,6 @@ export default function BpmnModeler() {
                 <Form.Control id='upload' type="file" accept=".bpmn, .xml" onChange={(event) => {
                     loadDiagram(event.target.files[0], modeler);
                     setDiagramName(event.target.files[0].name);
-                    console.log(diagramName);
                 }} style={{display: 'none'}}/>
 
                 <Button style={{display: 'inline-block', marginLeft: '30px', height: '54px'}} onClick={() => mockAPI(diagramName)}>Deploy<TickIcon/></Button>
@@ -127,7 +126,6 @@ async function downloadFile(modeler) {
 
 
 function loadDiagram(file, modeler) {
-    console.log(file.name)
     if (file) {
         const reader = new FileReader();
         reader.onload = async () => {

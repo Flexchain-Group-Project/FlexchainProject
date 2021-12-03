@@ -11,9 +11,9 @@ const NavigationBar = ()=>{
             <Navbar.Brand href="#home">Flexchain</Navbar.Brand>
             <Nav className="me-auto">
                 <Nav.Link href="/modeler">Choreography Modeler</Nav.Link>
-                <Nav.Link href="/deploy">Deploy Contract</Nav.Link>
+                {/*<Nav.Link href="/deploy">Deploy Contract</Nav.Link>*/}
                 <Nav.Link href="/update">Update Model</Nav.Link>
-                <Nav.Link href="/contracts">Contracts</Nav.Link>
+                {/*<Nav.Link href="/contracts">Contracts</Nav.Link>*/}
                 <Nav.Link href="/monitor">Monitor</Nav.Link>
             </Nav>
         </Container>

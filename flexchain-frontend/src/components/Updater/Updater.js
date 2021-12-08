@@ -12,11 +12,11 @@ import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import Offcanvas from "react-bootstrap/Offcanvas";
-import Web3 from "web3";
-import {abi} from "../../contracts/Monitor";
-import {getSender} from "../Deployer/DeploymentFunctions";
+
+import {getMonitorPastEvents} from "../BlockchainFunctions";
 import SelectAddress from "../SelectAddress";
 import hash from 'hash-it';
+
 
 export default function Updater() {
 
@@ -34,19 +34,6 @@ export default function Updater() {
         setShow(true);
     }
 
-    async function getMonitorPastEvents(){
-        const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-        const contract = new web3.eth.Contract(abi,'0xdCE3eD3ACf2d285338d38B215E0931831840287d');
-        const address= await getSender(web3);
-        await contract.getPastEvents("newContract",{
-            filter:{sender:address},
-            fromBlock:0
-        }).then(r=>setAddressList(r));
-       const diagramsList = await contract.methods.getDiagrams().call();
-       setDiagramsList(diagramsList);
-       console.log(diagramsList);
-
-    }
 
     function attachPanel() {
         const properties = modeler.get('propertiesPanel');
@@ -82,7 +69,9 @@ export default function Updater() {
         });
         setViewer(viewer);
 
-      await  getMonitorPastEvents()
+     const result= await  getMonitorPastEvents();
+     setAddressList(result[0]);
+     setDiagramsList(result[1]);
     }, [])
 
 
@@ -101,10 +90,7 @@ export default function Updater() {
 
     }
 
-    const props={
-        addresses:addressList,
-        diagrams:diagramsList
-    }
+
 
     return (
         <Container fluid className='mt-5'>

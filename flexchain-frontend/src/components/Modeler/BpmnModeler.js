@@ -16,7 +16,7 @@ import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import Offcanvas from 'react-bootstrap/Offcanvas'
-import {mockAPI,deployMonitor} from "../Deployer/DeploymentFunctions";
+import {deployProcessTemplate,deployMonitor} from "../BlockchainFunctions";
 import Alert from '@mui/material/Alert';
 
 
@@ -94,7 +94,7 @@ export default function BpmnModeler() {
                     setDiagramName(event.target.files[0].name);
                 }} style={{display: 'none'}}/>
 
-                <Button style={{display: 'inline-block', marginLeft: '30px', height: '54px'}} onClick={() => mockAPI(diagramName)}>Deploy<TickIcon/></Button>
+                <Button style={{display: 'inline-block', marginLeft: '30px', height: '54px'}} onClick={() => deployProcessTemplate(diagramName)}>Deploy<TickIcon/></Button>
             </div>
 
         </Container>

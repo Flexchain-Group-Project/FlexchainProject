@@ -13,8 +13,7 @@ const NavigationBar = ()=>{
                 <Nav.Link href="/modeler">Choreography Modeler</Nav.Link>
                 {/*<Nav.Link href="/deploy">Deploy Contract</Nav.Link>*/}
                 <Nav.Link href="/update">Update Model</Nav.Link>
-                {/*<Nav.Link href="/contracts">Contracts</Nav.Link>*/}
-                <Nav.Link href="/monitor">Monitor</Nav.Link>
+                <Nav.Link href="/execute">Execute</Nav.Link>
             </Nav>
         </Container>
     </Navbar>

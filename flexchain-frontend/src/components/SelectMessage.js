@@ -9,6 +9,7 @@ export default function SelectMessage(props) {
 
     const handleChange = (event) => {
         setMessage(event.target.value);
+        props.getMessage(event.target.value);
     };
 
     return (

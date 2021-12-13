@@ -52,7 +52,10 @@ export async function deploy(name, abi, bytecode) {
 
 }
 
-export async function setRules(address,abi,account,web3){
+export async function setRules(address){
+    const abi = await getProcessTemplateABI()
+    const web3 = getWeb3();
+    const account = await getSender(web3);
     const contract = new web3.eth.Contract(abi,address);
     const ids = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/generate-rules-id');
     const rules = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/generate-rules');
@@ -63,6 +66,31 @@ export async function setRules(address,abi,account,web3){
     console.log(rul);
 
   await contract.methods.setRules(id,rul).send({from: account});
+}
+
+export async function addRules(address){
+    const abi = await getProcessTemplateABI()
+    const web3 = getWeb3();
+    const account = await getSender(web3);
+    const contract = new web3.eth.Contract(abi,address);
+    const ids = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/add-rules-id');
+    const rules = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/add-rules');
+    const id = (await ids.text()).split(',');
+    console.log(id);
+    const rul = (await rules.text()).split('$');
+    console.log(rul);
+    await contract.methods.addRules(id,rul).send({from: account});
+}
+
+export async function deleteRules(address){
+    const abi = await getProcessTemplateABI()
+    const web3 = getWeb3();
+    const account = await getSender(web3);
+    const contract = new web3.eth.Contract(abi,address);
+    const ids = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/delete-rules');
+    const id = (await ids.text()).split(',');
+    console.log(id);
+    await contract.methods.deleteRules(id).send({from: account});
 }
 
 export async function deployMonitor(){

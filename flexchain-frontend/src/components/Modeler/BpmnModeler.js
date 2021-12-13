@@ -136,44 +136,4 @@ function loadDiagram(file, modeler) {
     }
 }
 
-/*async function mockAPI() {
-    const response = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/process' +
-        '');
-    response.json().then(res => {
-        console.log(res);
-       // deploy2(res)
-        deploy(res.contractName,res.abi,res.bytecode);
-    });
 
-}
-
-async function deploy2(contract) {
-    await deploy(contract.contractName, contract.abi, contract.bytecode);
-}
-
-function getWeb3() {
-    return new Web3(Web3.givenProvider || "ws://localhost:8545");
-}
-
-async function getSender(web3) {
-    //  const accounts = await window.ethereum.enable();
-    // return accounts[0];
-    const accounts = await web3.eth.requestAccounts();
-    return accounts[0];
-}
-
-function getContract(web3, abi) {
-
-    return new web3.eth.Contract(abi);
-
-}
-
-async function deploy(name, abi, bytecode) {
-    const web3 = getWeb3();
-    const account = await getSender(web3);
-    const contract = getContract(web3, abi);
-    const cont = await contract.deploy({data: bytecode}).send({gas: 1000000, from: account});
-    const address = cont.options.address;
-    const jsonData = {"address": address, "abi": abi};
-
-}*/

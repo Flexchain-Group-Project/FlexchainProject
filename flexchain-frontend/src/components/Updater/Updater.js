@@ -12,18 +12,17 @@ import propertiesPanelModule from 'bpmn-js-properties-panel';
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import Offcanvas from "react-bootstrap/Offcanvas";
-
-import {getMonitorPastEvents} from "../BlockchainFunctions";
+import {getMonitorPastEvents, addRules,deleteRules} from "../BlockchainFunctions";
 import SelectAddress from "../SelectAddress";
 import hash from 'hash-it';
 
 
 export default function Updater() {
-
     const[addressList , setAddressList]=useState([]);
     const[diagramsList , setDiagramsList]=useState([]);
     const [modeler, setModeler] = useState();
     const [viewer, setViewer] = useState();
+    const [contractAddress, setContractAddress] = useState();
     const [elementsCount, setElementsCount] = useState();
     const [elementRegistry, setElementRegistry] = useState();
 
@@ -90,11 +89,14 @@ export default function Updater() {
 
     }
 
+    const getAddressFromSelect =  (data) => {
+       setContractAddress(data)
+    }
 
 
     return (
         <Container fluid className='mt-5'>
-            <SelectAddress addressList={addressList} diagramsList={diagramsList}/>
+            <SelectAddress addressList={addressList} diagramsList={diagramsList} childToParent={getAddressFromSelect}/>
             <div className='mb-3' id="canvas-viewer" style={{height: 600, width: '100%', border: '1px solid grey'}}/>
             <h5 title='Show properties panel' style={{fontFamily:'Arial',width:'auto'}} className='mt-4' onClick={handleShow} onMouseLeave={(e)=>e.target.style.color='black'} onMouseOver={(e)=>e.target.style.color='grey'}><RightIcon/>Properties</h5>
             <div id="properties-panel" style={{display: 'none'}}></div>
@@ -119,9 +121,15 @@ export default function Updater() {
                 loadDiagram(event.target.files[0], modeler, viewer);
                 console.log(elementsCount);
             }} style={{display: 'none'}}/>
+            <Button style={{display: 'inline-block', marginLeft: '30px', marginBottom: '20px'}} onClick={()=>updateRules(contractAddress)}>Update Rules</Button>
         </Container>
 
     );
+}
+
+async function updateRules(address){
+    await addRules(address);
+    await deleteRules(address);
 }
 
 function UploadBtnClicked(upload) {
@@ -131,7 +139,7 @@ function UploadBtnClicked(upload) {
 
 function getElementRegistry(modeler) {
     const elementRegistry = modeler.get('elementRegistry');
-    console.log(elementRegistry.getAll());
+    //console.log(elementRegistry.getAll());
     const elementList = elementRegistry.getAll();
     const len = elementList.length;
 
@@ -141,7 +149,7 @@ function getElementRegistry(modeler) {
         items.push(regItem);
     });
 
-    console.log(items);
+   // console.log(items);
     return items;
 }
 
@@ -160,6 +168,7 @@ function showChanges(modeler, elementsCount, viewer, registry) {
     for (let i = 0; i < items.length; i++) {
         if (registry.includes(items[i]) === false) {
             let canvas = modeler.get('canvas');
+            //console.log(items[i]);
             canvas.addMarker(items[i], 'highlight_green');
         }
     }
@@ -186,7 +195,7 @@ function showChanges(modeler, elementsCount, viewer, registry) {
         if (items.includes(registry[i]) === false) {
             // sc(viewer,registry[i],'red','red');
             let canvas = viewer.get('canvas');
-
+            console.log(registry[i])
             canvas.addMarker(registry[i], 'highlight_red');
 
         }

@@ -57,8 +57,8 @@ export async function setRules(address){
     const web3 = getWeb3();
     const account = await getSender(web3);
     const contract = new web3.eth.Contract(abi,address);
-    const ids = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/generate-rules-id');
-    const rules = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/generate-rules');
+    const ids = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/generate-rules-id2');
+    const rules = await fetch('https://8a0e6be3-45af-4b45-9b82-2c5a99bd5d40.mock.pstmn.io/generate-rules2');
     //ids.json().then(res=>console.log(res));
     const id = (await ids.text()).split(',');
     console.log(id);

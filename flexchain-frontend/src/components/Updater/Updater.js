@@ -14,6 +14,8 @@ import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import Offcanvas from "react-bootstrap/Offcanvas";
 import {getMonitorPastEvents, addRules,deleteRules} from "../BlockchainFunctions";
 import SelectAddress from "../SelectAddress";
+import { getProcessTemplateABI, getSender, getWeb3} from "../BlockchainFunctions";
+import {diagramCheck} from "../Executer/ExecuteMessage";
 import hash from 'hash-it';
 
 
@@ -89,8 +91,17 @@ export default function Updater() {
 
     }
 
-    const getAddressFromSelect =  (data) => {
+    const getAddressFromSelect = async (data) => {
        setContractAddress(data)
+        const web3 = getWeb3();
+       const abi = await getProcessTemplateABI();
+        const cont = new web3.eth.Contract(abi, data);
+        const ids = await cont.methods.getIDs().call();
+        let canvas = viewer.get('canvas');
+        let registry = viewer.get('elementRegistry')
+        const elements = registry.getAll();
+        let check =diagramCheck(ids,elements)
+        if (check == true) {alert("Diagramma e contratto non corrispondono")}
     }
 
 

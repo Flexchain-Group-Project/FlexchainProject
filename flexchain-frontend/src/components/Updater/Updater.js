@@ -13,7 +13,7 @@ import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import Offcanvas from "react-bootstrap/Offcanvas";
 import {getMonitorPastEvents, addRules,deleteRules} from "../BlockchainFunctions";
-import SelectAddress from "../SelectAddress";
+import SelectAddress from "../SelectAddress/SelectAddress";
 import { getProcessTemplateABI, getSender, getWeb3} from "../BlockchainFunctions";
 import {diagramCheck} from "../Executer/ExecuteMessage";
 import hash from 'hash-it';

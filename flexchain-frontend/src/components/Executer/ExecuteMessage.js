@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import {getMonitorPastEvents, getProcessTemplateABI, getSender, getWeb3} from "../BlockchainFunctions";
 import Container from 'react-bootstrap/Container'
-import SelectAddress from "../SelectAddress";
-import SelectMessage from "../SelectMessage"
+import SelectAddress from "../SelectAddress/SelectAddress";
+import SelectMessage from "../SelectMessage/SelectMessage"
 import {Button, Form, Row, Col} from 'react-bootstrap';
 import Viewer from 'chor-js/lib/NavigatedViewer';
 import {RiUploadCloudFill as IconUpload} from "react-icons/ri";
@@ -128,7 +128,7 @@ const ExecuteMessage = () => {
 
 export default ExecuteMessage;
 
- export function diagramCheck(ids, elements) {
+export function diagramCheck(ids, elements) {
     //ids.map((id)=>console.log('id:'+
     let check = false;
     let boi = [];
